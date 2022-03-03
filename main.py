@@ -23,6 +23,11 @@ from metrics.metric_utils import (
 from models.timegan import TimeGAN
 from models.utils import timegan_trainer, timegan_generator
 
+def manual_pause():
+    print("Manual pause executed.")
+    wait = input("Please Enter to continue")
+    print("Continuing execution after manual pause")
+    
 def main(args):
     ##############################################
     # Initialize output directories
