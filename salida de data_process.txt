@@ -1,0 +1,4 @@
+salida de data_process
+return output, time, params, max_seq_len, padding_value
+
+cada bloque curr_data es de 7 elementos que son vectores de 6 elementos
