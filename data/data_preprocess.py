@@ -29,6 +29,11 @@ from tqdm import tqdm
 from scipy import stats
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
+def manual_pause():
+    print("Manual pause executed.")
+    wait = input("Please Enter to continue")
+    print("Continuing execution after manual pause")
+
 def data_preprocess(
     file_name: str, 
     max_seq_len: int, 
@@ -55,6 +60,7 @@ def data_preprocess(
     - time: ndarray of ints indicating the length for each data
     - params: the parameters to rescale the data 
     """
+
 
     #########################
     # Load data
@@ -119,12 +125,17 @@ def data_preprocess(
     output.fill(padding_value)
     time = []
 
-    # For each uniq id
+    # print(f"\n DataPreProcess: tqdm(range(no) = {no}")
+
+    # For each uniq id    
     for i in tqdm(range(no)):
         # Extract the time-series data with a certain admissionid
 
         curr_data = ori_data[ori_data[index] == uniq_id[i]].to_numpy()
 
+        # print(f"\n DataPreProcess: type(curr_data) = {type(curr_data)} \n")
+        # print(f"\n DataPreProcess: iteration {i} \n")
+                
         # Impute missing data
         curr_data = imputer(curr_data, impute_vals)
 
@@ -134,6 +145,12 @@ def data_preprocess(
         # Extract time and assign to the preprocessed data (Excluding ID)
         curr_no = len(curr_data)
 
+        # print(f"\n DataPreProcess: curr_data head \n")
+        # print(curr_data[:10])
+        # print("\n")
+
+        # print(f"\n DataPreProcess: curr_no = {curr_no}")        
+
         # Pad data to `max_seq_len`
         if curr_no >= max_seq_len:
             output[i, :, :] = curr_data[:max_seq_len, 1:]  # Shape: [1, max_seq_len, dim]
@@ -141,6 +158,15 @@ def data_preprocess(
         else:
             output[i, :curr_no, :] = curr_data[:, 1:]  # Shape: [1, max_seq_len, dim]
             time.append(curr_no)
+        
+        # print(f"\n DataPreProcess: output shape = {output.shape}\n")
+        # print("\n ")
+        # print("\n DataPreProcess: output \n")
+        # print(output)
+        # print("\n DataPreProcess: time")
+        # print(time[:10])
+        # print("\n DataPreProcess \n")
+        # manual_pause()
 
     return output, time, params, max_seq_len, padding_value
 
