@@ -31,8 +31,8 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 def manual_pause():
     print("Manual pause executed.")
-    wait = input("Please Enter to continue")
-    print("Continuing execution after manual pause")
+    wait = input("Please Enter to continue.")
+    print("Continuing execution after manual pause.")
 
 def data_preprocess(
     file_name: str, 
