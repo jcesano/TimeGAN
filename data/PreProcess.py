@@ -22,6 +22,6 @@ def summarize_by_date():
     #########################
 
     # data_path = "TimeGAN/data/stock.csv"
-    data_path = "TimeGAN/data/Sensors_Data_new_formatted.csv"
+    data_path = "TimeGAN/data/NO2_sequence_five_sensors.csv"
 
 summarize_by_date()
