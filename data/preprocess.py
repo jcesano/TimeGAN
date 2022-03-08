@@ -1,27 +1,26 @@
-def summarize_by_date():
+# 3rd party modules
+import pandas as pd
+
+def open_input_file(file_name):  
   print("Hello Julio")
-    ## Runtime directory
-    code_dir = os.path.abspath(".")
-    if not os.path.exists(code_dir):
-        raise ValueError(f"Code directory not found at {code_dir}.")
+  
+  # Load csv
+  print("Loading data...\n")
+  ori_data = pd.read_csv(file_name)
+  
+  return ori_data
 
-    ## Data directory
-    data_path = os.path.abspath("TimeGAN/data")
-    if not os.path.exists(data_path):
-        raise ValueError(f"Data file not found at {data_path}.")
-    data_dir = os.path.dirname(data_path)
-    data_file_name = os.path.basename(data_path)
 
-    ## Output directories
-    args.model_path = os.path.abspath(f"TimeGAN/output/{args.exp}/")
-    out_dir = os.path.abspath(args.model_path)
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir, exist_ok=True)
-    #########################
-    # Load and preprocess data for model
-    #########################
+  
 
-    # data_path = "TimeGAN/data/stock.csv"
-    data_path = "TimeGAN/data/NO2_sequence_five_sensors.csv"
 
-summarize_by_date()
+#########################
+# Load and preprocess data for model
+#########################
+
+file_name = "TimeGAN/data/NO2_sequence_five_sensors.csv"
+original_df = open_input_file(file_name)
+
+print(type(original_df))
+
+
