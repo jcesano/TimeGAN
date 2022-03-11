@@ -12,6 +12,45 @@ def open_input_file(file_name):
   return ori_data
 
 
+def transform_column_negative_in_NaN(df_in, column_name):
+  # Detecting negative numbers and turning them into NaN values
+  print("Transforming column: ", column_name)
+  cnt=0
+  affected_values = 0
+  for row in df_in[column_name]:        
+    value = df_in.loc[cnt, column_name]
+    if(value <= 0):      
+      df_in.loc[cnt, column_name]=np.nan
+      affected_values += 1 
+    cnt+=1
+
+  print("Values affected in column ", column_name, " :", affected_values, "\n")
+
+
+
+def transforming_negative_values_in_NaN(df_in):
+  # Detecting negative numbers and turning them into NaN values
+  print("Transforming in each column, each negative value into a NaN value \n")
+
+  transform_column_negative_in_NaN(df_in, 'S008')
+
+  transform_column_negative_in_NaN(df_in, 'S035')
+
+  transform_column_negative_in_NaN(df_in, 'S038')
+
+  transform_column_negative_in_NaN(df_in, 'S048')
+
+  transform_column_negative_in_NaN(df_in, 'S050')
+
+
+def showing_negative_values(df_num):
+  print('Negatives Found: \n')
+  print(df_num.where(df_num < 0).count())
+
+def showing_zeros_values(df_num):
+  print('Zeros Found: \n')
+  print(df_num.where(df_num == 0).count())
+
 def showing_missing_values(v_original_data):
   print("Detecting missing values...\n")
   print("Checking if there is any missing value in our dataset \n")
@@ -19,27 +58,7 @@ def showing_missing_values(v_original_data):
   print("\n Total missing values for each feature: \n")
   print(v_original_data.isnull().sum())
   print("\n Checking if we have any negative values in the dataset \n")
-  # select the float columns
-  df_num = v_original_data.select_dtypes(include=[np.float64])
-  print(df_num.head())
-
-  print('Negatives Found: \n')
-  print(df_num.where(df_num < 0).count())
-
-  print('Zeros Found: \n')  
-  print(df_num.where(df_num == 0).count())
-
-  # select non-numeric columns
-  #df_num = v_original_data.select_dtypes(exclude=[np.number])
   
-  #print((v_original_data < 1).count())
-  #print('Negatives Found:')
-  #print(v_original_data.where(v_original_data < 0).count())
-  #print('Zeros Found:')
-  #print(v_original_data.where(v_original_data == 0).count())
-
-
-
 def showing_shape_of_data(v_original_data):
   data_shape = v_original_data.shape
   print(f"Original shape of Sensors data_frame: {data_shape} \n")
@@ -63,6 +82,15 @@ def show_original_data_features(v_original_data):
   showing_head_of_data(v_original_data)
 
   showing_missing_values(v_original_data)
+
+  # select the float columns
+  df_num = v_original_data.select_dtypes(include=[np.float64])
+  print(df_num.head())
+
+  showing_negative_values(df_num)
+  showing_zeros_values(df_num)
+
+  transforming_negative_values_in_NaN(v_original_data)
   
 
 
