@@ -2,15 +2,17 @@
 import pandas as pd
 import numpy as np
 
-def open_input_file(file_name):  
-  print("Hello Julio")
-  
-  # Load csv
-  print("Loading data...\n")
-  ori_data = pd.read_csv(file_name)
-  
-  return ori_data
+def grouping_by_date(original_df):
 
+  return original_df.groupby('DATETIME').agg(
+          Mean_S008=('S008', "mean"),    # Mean of sensor 008
+          Mean_S035=('S035', "mean"),    # Mean of sensor 035
+          Mean_S038=('S038', "mean"),    # Mean of sensor 038
+          Mean_S048=('S048', "mean"),    # Mean of sensor 048
+          Mean_S050=('S050', "mean"),    # Mean of sensor 050
+          RecCount =('DATETIME', "count")   # get the count of networks            
+        
+        )
 
 def transform_column_negative_in_NaN(df_in, column_name):
   # Detecting negative numbers and turning them into NaN values
@@ -93,6 +95,14 @@ def show_original_data_features(v_original_data):
   transforming_negative_values_in_NaN(v_original_data)
   
 
+def open_input_file(file_name):  
+  print("Hello Julio")
+  
+  # Load csv
+  print("Loading data...\n")
+  ori_data = pd.read_csv(file_name)
+  
+  return ori_data
 
 #########################
 # Load and preprocess data for model
@@ -101,7 +111,12 @@ def show_original_data_features(v_original_data):
 file_name = "TimeGAN/data/NO2_sequence_five_sensors.csv"
 original_df = open_input_file(file_name)
 
-show_original_data_features(original_df)
+#show_original_data_features(original_df)
+
+grouped_df = grouping_by_date(original_df)
+
+print(grouped_df.head())
+
 
 print(type(original_df))
 
