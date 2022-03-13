@@ -14,6 +14,8 @@ def grouping_by_date(original_df):
         
         )
 
+def complete_NaN_values_with_previous_valid_value(df_in):
+
 def transform_column_negative_in_NaN(df_in, column_name):
   # Detecting negative numbers and turning them into NaN values
   print("Transforming column: ", column_name)
@@ -74,7 +76,7 @@ def showing_datatypes_of_data(v_original_data):
   print("Showing types of each column of dataframe: \n")
   print(v_original_data.dtypes)
 
-def show_original_data_features(v_original_data):
+def show_data_features(v_original_data):
   print("Showing some features of the original sensors data \n")
 
   showing_shape_of_data(v_original_data)
@@ -111,9 +113,13 @@ def open_input_file(file_name):
 file_name = "TimeGAN/data/NO2_sequence_five_sensors.csv"
 original_df = open_input_file(file_name)
 
-show_original_data_features(original_df)
+show_data_features(original_df)
 
 transforming_negative_values_in_NaN(original_df)
+
+show_data_features(original_df)
+
+complete_NaN_values_with_previous_valid_value(original_df)
 
 # grouped_df = grouping_by_date(original_df)
 
