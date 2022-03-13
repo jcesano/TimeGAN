@@ -13,8 +13,33 @@ def grouping_by_date(original_df):
           RecCount =('DATETIME', "count")   # get the count of networks            
         
         )
+def complete_col_NaN_values_with_last_valid_value(df_in, column_name):
+  print("Completing NaN values in column: ",column_name, "\n")
 
-def complete_NaN_values_with_previous_valid_value(df_in):
+  col_length = len(df_in[column_name])
+  last_value = df_in.loc[0, column_name]
+  affected_values = 0
+  for i in range(1, col_length):
+    if np.isnan(df_in.loc[i, column_name]):
+      df_in.loc[i, column_name] = last_value
+      affected_values += 1
+    else:
+      last_value = df_in.loc[i, column_name]
+  
+  print("Total rows affected in column ", column_name," is:", affected_values, "\n")
+
+def complete_NaN_values_with_last_valid_value(df_in):
+  print("Completing NaN values with the last valid value of the same NaN's column \n")
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "S008")
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "S035")
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "S038")
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "S048")
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "S050")
 
 def transform_column_negative_in_NaN(df_in, column_name):
   # Detecting negative numbers and turning them into NaN values
@@ -77,8 +102,7 @@ def showing_datatypes_of_data(v_original_data):
   print(v_original_data.dtypes)
 
 def show_data_features(v_original_data):
-  print("Showing some features of the original sensors data \n")
-
+  
   showing_shape_of_data(v_original_data)
 
   showing_datatypes_of_data(v_original_data)
@@ -89,8 +113,7 @@ def show_data_features(v_original_data):
 
   # select the float columns
   df_num = v_original_data.select_dtypes(include=[np.float64])
-  print(df_num.head())
-
+  
   showing_negative_values(df_num)
   showing_zeros_values(df_num)
 
@@ -113,17 +136,23 @@ def open_input_file(file_name):
 file_name = "TimeGAN/data/NO2_sequence_five_sensors.csv"
 original_df = open_input_file(file_name)
 
+print("Showing some features of the sensors data \n")
 show_data_features(original_df)
 
 transforming_negative_values_in_NaN(original_df)
 
+print("Showing some features of the sensors data after transformation of negative values \n")
 show_data_features(original_df)
 
-complete_NaN_values_with_previous_valid_value(original_df)
+complete_NaN_values_with_last_valid_value(original_df)
 
-# grouped_df = grouping_by_date(original_df)
+print("Showing some features of the sensors data after transformation of NaN values \n")
+show_data_features(original_df)
 
-# print(grouped_df.head())
+grouped_df = grouping_by_date(original_df)
+
+print("showing the first rows of the grouped dataset \n")
+print(grouped_df.head())
 
 
 # print(type(original_df))
