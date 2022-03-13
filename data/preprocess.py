@@ -92,7 +92,7 @@ def show_original_data_features(v_original_data):
   showing_negative_values(df_num)
   showing_zeros_values(df_num)
 
-  transforming_negative_values_in_NaN(v_original_data)
+  
   
 
 def open_input_file(file_name):  
@@ -111,13 +111,15 @@ def open_input_file(file_name):
 file_name = "TimeGAN/data/NO2_sequence_five_sensors.csv"
 original_df = open_input_file(file_name)
 
-#show_original_data_features(original_df)
+show_original_data_features(original_df)
 
-grouped_df = grouping_by_date(original_df)
+transforming_negative_values_in_NaN(original_df)
 
-print(grouped_df.head())
+# grouped_df = grouping_by_date(original_df)
+
+# print(grouped_df.head())
 
 
-print(type(original_df))
+# print(type(original_df))
 
 
