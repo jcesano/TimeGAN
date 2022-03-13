@@ -154,7 +154,32 @@ grouped_df = grouping_by_date(original_df)
 print("showing the first rows of the grouped dataset \n")
 print(grouped_df.head())
 
+print("Detecting gaps in DateTime column... \n")
+print(grouped_df.columns)
 
-# print(type(original_df))
+begin_date = grouped_df.index.min()
+end_date =  grouped_df.index.max()
+print("The begin datetime of data is:", begin_date, "\n")
+print("The end datetime of data is:", end_date, "\n")
 
 
+full_range = pd.date_range(start=begin_date, end=end_date, freq='H')
+
+print("Full range begining is: \n")
+
+print(full_range[:10], "\n")
+
+full_range_len = len(full_range)
+print("The full range has the number of ", full_range_len, " entries \n")
+
+grouped_df_len = len(grouped_df)
+print("The number of entries in grouped_df is: ", grouped_df_len, "\n")
+
+print("So we have ", grouped_df_len - full_range_len, "entries that are missing to complete full date range \n")
+
+print("The missing entries are the following: \n")
+
+print(type(grouped_df))
+grouped_df_datetime = pd.to_datetime(grouped_df.index)
+
+print(full_range.difference(grouped_df_datetime))
