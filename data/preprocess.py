@@ -267,13 +267,65 @@ def preprocess_data_cleaning():
   return grouped_df
 
 def preprocess_formatting_for_model():
-  df_prev = preprocess_data_cleaning()
+  group_df = preprocess_data_cleaning()
 
-  return df_prev
+  datetime_v = group_df['DATETIME']
+
+  date_v = pd.to_datetime(datetime_v)
+
+  print("type of date_v:", type(date_v), '\n')
+
+
+
+  date_year_v = date_v.dt.year
+  print("type of date_year_v:", type(date_year_v), '\n')
+
+  
+  date_month_v = date_v.dt.month
+  print("type of date_month_v:", type(date_month_v), '\n')
+
+  date_day_v = date_v.dt.day
+  print("type of date_day_v:", type(date_day_v), '\n')
+
+
+  date_year_f = date_year_v.to_frame()
+  print("type of date_year_f:", type(date_year_f), '\n')
+
+  date_month_f = date_month_v.to_frame()
+  print("type of date_month_f:", type(date_month_f), '\n')
+
+  date_day_f = date_day_v.to_frame()
+  print("type of date_day_f:", type(date_day_f), '\n')
+  
+
+  date_year_str = date_year_f['DATETIME'].astype(str)
+  print("type of date_year_str:", type(date_year_str), '\n')
+
+  date_month_str = date_month_f['DATETIME'].astype(str)
+  print("type of date_month_str:", type(date_month_str), '\n')
+
+  date_month_str = date_month_str.to_frame()
+  print("type of date_month_str.to_frame():", type(date_month_str), '\n')
+
+  date_month_str = date_month_str.astype({"DATETIME": str})
+  print("Muestro dtypes luego aplicar astype({}) \n")
+  print(date_month_str.dtypes)
+  print("\n")
+
+  date_month_str["DATETIME"] = date_month_str["DATETIME"].apply(lambda x: x.zfill(2))
+  # df['ID'] = df['ID'].apply(lambda x: x.zfill(15))
+  #date_month_str = date_month_str.apply(lambda x: x.zfill(2))
+
+  print(type(date_month_str))
+
+  print(date_month_str.head())
+
+
+  
 
 #########################
 # Load and preprocess data for model
 #########################
 
 
-
+preprocess_formatting_for_model()
