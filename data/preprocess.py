@@ -270,11 +270,10 @@ def preprocess_formatting_for_model():
   df_prev = preprocess_data_cleaning()
 
   return df_prev
-  
+
 #########################
 # Load and preprocess data for model
 #########################
 
 
 
-preprocess_formatting_for_model()
