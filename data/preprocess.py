@@ -2,20 +2,26 @@
 import pandas as pd
 import numpy as np
 
+def reset_index_in_df(df_in):
+  
+  df_in = df_in.reset_index().rename(columns={'index': 'DATETIME'})  
+  return df_in
+
+def set_index_in_df(df_in):
+  df_in = df_in.set_index("DATETIME")
+  df_in.index = pd.to_datetime(df_in.index)
+  return df_in
+
 def showing_missing_values_in_grouped_data(grouped_df):
-  print("Showing missing values (NaN values in grouped data.\n")  
+  print("Showing missing values (NaN values) in grouped data.\n")  
   showing_missing_values(grouped_df)
 
 def transforming_gaps_into_NaN_values(grouped_df, full_range):
-  print("PRUEBA \n")
-  print("Length of grouped_df before reindexing is:", len(grouped_df), ".\n")
-  print(grouped_df.head())
-  showing_missing_values(grouped_df)
+  print("Transforming gaps into NaN values\n")
   grouped_df = grouped_df.reindex(full_range) 
-  print("LUEGO DE REINDEX \n")
-  print(grouped_df.head())
-  print("FIN PRUEBA \n")
 
+  print("Showing new length of group_df:", len(grouped_df),"\n")
+  
   return grouped_df
 
 def detecting_gaps_in_grouped_data(grouped_df):
@@ -43,26 +49,32 @@ def detecting_gaps_in_grouped_data(grouped_df):
 
   print("The missing entries are the following: \n")
 
-  grouped_df_datetime = pd.to_datetime(grouped_df.index)
+  grouped_df_datetime = grouped_df.index
 
   print(full_range.difference(grouped_df_datetime))
+  print("\n")
 
   return full_range
 
 def grouping_by_date(original_df):
 
   print("Grouping the dataset by DATETIME in order to have a unique datetime as key of the dataframe \n")
-
-  return original_df.groupby('DATETIME').agg(
+  
+  group_df = original_df.groupby('DATETIME').agg(    
           Mean_S008=('S008', "mean"),    # Mean of sensor 008
           Mean_S035=('S035', "mean"),    # Mean of sensor 035
           Mean_S038=('S038', "mean"),    # Mean of sensor 038
           Mean_S048=('S048', "mean"),    # Mean of sensor 048
           Mean_S050=('S050', "mean"),    # Mean of sensor 050
-          RecCount =('DATETIME', "count")   # get the count of networks            
-        
+          RecCount =('DATETIME', "count")   # get the count of networks                    
         )
-def show_grouped_data_by_date(original_df):
+  
+  # This line is needed to allow reindexing to a new range in the future
+  group_df.index = pd.to_datetime(group_df.index)
+
+  return group_df
+        
+def group_data_by_date(original_df):
   
   grouped_df = grouping_by_date(original_df)
 
@@ -78,7 +90,9 @@ def complete_col_NaN_values_with_last_valid_value(df_in, column_name):
   print("Completing NaN values in column: ",column_name, "\n")
 
   col_length = len(df_in[column_name])
+
   last_value = df_in.loc[0, column_name]
+
   affected_values = 0
   for i in range(1, col_length):
     if np.isnan(df_in.loc[i, column_name]):
@@ -88,6 +102,28 @@ def complete_col_NaN_values_with_last_valid_value(df_in, column_name):
       last_value = df_in.loc[i, column_name]
   
   print("Total rows affected in column ", column_name," is:", affected_values, "\n")
+  return df_in
+
+def complete_NaN_values_with_last_valid_value2(df_in):
+  print("Completing NaN values with the last valid value of the same NaN's column \n")
+
+  df_in = reset_index_in_df(df_in)
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "Mean_S008")
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "Mean_S035")
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "Mean_S038")
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "Mean_S048")
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "Mean_S050")
+
+  complete_col_NaN_values_with_last_valid_value(df_in, "RecCount")
+ 
+  df_in = set_index_in_df(df_in)
+  
+  return df_in
 
 def complete_NaN_values_with_last_valid_value(df_in):
   print("Completing NaN values with the last valid value of the same NaN's column \n")
@@ -214,13 +250,21 @@ def preprocess_data_for_model():
   print("Showing the same characteristics of the sensors data after transformation of NaN values \n")
   show_data_features(original_df)
 
-  grouped_df = show_grouped_data_by_date(original_df)
+  grouped_df = group_data_by_date(original_df)
 
   full_range = detecting_gaps_in_grouped_data(grouped_df)
 
   grouped_df = transforming_gaps_into_NaN_values(grouped_df, full_range)
 
   showing_missing_values_in_grouped_data(grouped_df)
+
+  grouped_df = complete_NaN_values_with_last_valid_value2(grouped_df)
+  
+  grouped_df = reset_index_in_df(grouped_df)
+
+  showing_missing_values_in_grouped_data(grouped_df)
+    
+  return grouped_df, full_range
 
 #########################
 # Load and preprocess data for model
