@@ -232,7 +232,7 @@ def open_input_file(file_name):
   return ori_data
 
 
-def preprocess_data_for_model():
+def preprocess_data_cleaning():
 
   file_name = "TimeGAN/data/NO2_sequence_five_sensors.csv"
   original_df = open_input_file(file_name)
@@ -264,10 +264,17 @@ def preprocess_data_for_model():
 
   showing_missing_values_in_grouped_data(grouped_df)
     
-  return grouped_df, full_range
+  return grouped_df
 
+def preprocess_formatting_for_model():
+  df_prev = preprocess_data_cleaning()
+
+  return df_prev
+  
 #########################
 # Load and preprocess data for model
 #########################
 
-preprocess_data_for_model()
+
+
+preprocess_formatting_for_model()
