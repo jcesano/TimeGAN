@@ -266,66 +266,96 @@ def preprocess_data_cleaning():
     
   return grouped_df
 
-def preprocess_formatting_for_model():
-  group_df = preprocess_data_cleaning()
-
-  datetime_v = group_df['DATETIME']
-
-  date_v = pd.to_datetime(datetime_v)
-
-  print("type of date_v:", type(date_v), '\n')
-
-
-
-  date_year_v = date_v.dt.year
-  print("type of date_year_v:", type(date_year_v), '\n')
-
-  
-  date_month_v = date_v.dt.month
-  print("type of date_month_v:", type(date_month_v), '\n')
-
-  date_day_v = date_v.dt.day
-  print("type of date_day_v:", type(date_day_v), '\n')
-
-
-  date_year_f = date_year_v.to_frame()
-  print("type of date_year_f:", type(date_year_f), '\n')
-
-  date_month_f = date_month_v.to_frame()
-  print("type of date_month_f:", type(date_month_f), '\n')
-
-  date_day_f = date_day_v.to_frame()
-  print("type of date_day_f:", type(date_day_f), '\n')
-  
-
-  date_year_str = date_year_f['DATETIME'].astype(str)
-  print("type of date_year_str:", type(date_year_str), '\n')
-
-  date_month_str = date_month_f['DATETIME'].astype(str)
-  print("type of date_month_str:", type(date_month_str), '\n')
-
-  date_month_str = date_month_str.to_frame()
-  print("type of date_month_str.to_frame():", type(date_month_str), '\n')
-
-  date_month_str = date_month_str.astype({"DATETIME": str})
-  print("Muestro dtypes luego aplicar astype({}) \n")
-  print(date_month_str.dtypes)
-  print("\n")
-
-  date_month_str["DATETIME"] = date_month_str["DATETIME"].apply(lambda x: x.zfill(2))
-  # df['ID'] = df['ID'].apply(lambda x: x.zfill(15))
-  #date_month_str = date_month_str.apply(lambda x: x.zfill(2))
-
-  print(type(date_month_str))
-
-  print(date_month_str.head())
-
-
-  
-
 #########################
 # Load and preprocess data for model
 #########################
+def preprocess_formatting_for_model():
+  group_df = preprocess_data_cleaning()
+
+  print(" 1- Checking the type and content of group_df['DATETIME'] \n")
+  datetime_s = group_df['DATETIME']
+  print("type of date_v:", type(datetime_s), '\n')
+  print("types of columns",datetime_s.dtypes, "\n")
+  # It is a series of datetime values 
+
+  print("2- Extracting the day, month and year from datetime_v using dt series's method. \n")
+  datetime_day_s = datetime_s.dt.day
+  print("type of datetime_day_s:", type(datetime_day_s), '\n')
+  print("type of content of datetime_day_s", datetime_day_s.dtypes)
+  # Result is a Series of days (values of type integer).
+
+  datetime_month_s = datetime_s.dt.month
+  print("type of datetime_month_s:", type(datetime_month_s), '\n')
+  print("type of content of datetime_month_s", datetime_month_s.dtypes)
+  # Result is a Series of months (values of type integer).
+
+  datetime_year_s = datetime_s.dt.year
+  print("type of datetime_year_s:", type(datetime_year_s), '\n')
+  print("type of content of datetime_year_s", datetime_year_s.dtypes)
+  # Result is a Series of years (values of type integer).
+
+  print("3- Converting the structures into a Dataframe to use methods astype() and apply() with lambda expressions \n")
+  #import pandas as pd
+
+  datetime_day_f = datetime_day_s.to_frame()
+  print("type of datetime_day_f:", type(datetime_day_f), '\n')
+  print("type of content of datetime_day_f", datetime_day_f.dtypes)
+  # Result is a Dataframe containing a vector of integer values.
+
+  datetime_month_f = datetime_month_s.to_frame()
+  print("type of datetime_month_f:", type(datetime_month_f), '\n')
+  print("type of content of datetime_month_f", datetime_month_f.dtypes)
+  # Result is a Dataframe containing a vector of integer values.
+
+  datetime_year_f = datetime_year_s.to_frame()
+  print("type of datetime_year_f:", type(datetime_year_f), '\n')
+  print("type of content of datetime_month_f", datetime_year_f.dtypes)
+  # Result is a Dataframe containing a vector of integer values.
+
+  print("4- Converting content of Dataframes from int to string \n")
+  datetime_day_f_str = datetime_day_f.astype({"DATETIME":"str"})
+  print("type of datetime_day_f_str:", type(datetime_day_f_str), '\n')
+  print("type of content of datetime_day_f_str", datetime_day_f_str.dtypes)
+  # Result is a Dataframe containing string values
+
+  datetime_month_f_str = datetime_month_f.astype({"DATETIME":"str"})
+  print("type of datetime_month_f_str:", type(datetime_month_f_str), '\n')
+  print("type of content of datetime_month_f_str", datetime_month_f_str.dtypes)
+  # Result is a Dataframe containing string values
+
+  datetime_year_f_str = datetime_year_f.astype({"DATETIME":"str"})
+  print("type of datetime_year_f_str:", type(datetime_year_f_str), '\n')
+  print("type of content of datetime_year_f_str", datetime_year_f_str.dtypes)
+  # Result is a Dataframe containing integers as string values
+
+  print("5- Converting string numbers of length 1 into length 2 (for days and months only) putting a 0 in front \n")
+  datetime_day_f_str["DATETIME"] = datetime_day_f_str["DATETIME"].apply(lambda x: x.zfill(2))
+  print("type of datetime_day_f_str:", type(datetime_day_f_str), '\n')
+  print("type of content of datetime_day_f_str", datetime_day_f_str.dtypes)
+  print("Showing head of dataset datetime_day_f_str \n")
+  print(datetime_day_f_str.head())
+  # Result is a Dataframe containing numbers as string values with a "0" in front one digit numbers
+
+  datetime_month_f_str["DATETIME"] = datetime_month_f_str["DATETIME"].apply(lambda x: x.zfill(2))
+  print("type of datetime_month_f_str:", type(datetime_month_f_str), '\n')
+  print("type of content of datetime_month_f_str", datetime_month_f_str.dtypes)
+  print("Showing head of dataset datetime_month_f_str \n")
+  print(datetime_month_f_str.head())
+  # Result is a Dataframe containing numbers as string values with a "0" in front one digit numbers
+
+  print("6- Combining the three dataframes (day, month and year) into a dataframe with one column that contains the concatenation of year+month+day. \n")
+
+  datetime_str = datetime_year_f_str["DATETIME"] + datetime_month_f_str["DATETIME"] + datetime_day_f_str["DATETIME"]
+  print(datetime_str.head())
+
+  print("7- Adding dataframe's column containing date of format yyyymmdd as string as a new column of original dataframe \n")
+  group_df["Idx"] = datetime_str
+  print(group_df.head())
+
+  print("8- Create a csv file containing columns Idx, Mean_S008, Mean_S035, Mean_S038, Mean_S048 and Mean_S050")
+  group_df.to_csv('/content/TimeGAN/data/Sensors_data_formatted.csv',columns=['Idx', 'Mean_S008', 'Mean_S035', 'Mean_S038', 'Mean_S048', 'Mean_S050'])
 
 
-preprocess_formatting_for_model()
+
+
+

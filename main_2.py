@@ -86,16 +86,16 @@ def main(args):
     #########################
 
     # data_path = "TimeGAN/data/stock.csv"
-    data_path = "TimeGAN/data/Sensors_Data_new_formatted.csv"
+    data_path = "TimeGAN/data/Sensors_data_formatted.csv"
 
-    print("\n mostrando argumentos ANTES de data_preprocess. \n")
+    print("\n Showing args before excuting data_preprocess. \n")
     print("data_path:",data_path, "max_seq_len:", args.max_seq_len)
     manual_pause()
     X, T, _, args.max_seq_len, args.padding_value = data_preprocess(
         data_path, args.max_seq_len
     )
 
-    print("mostrando argumentos LUEGO de data_preprocess \n")
+    print("\n Showing args after excuting data_preprocess. \n")
     print("\n")
     print("type of X", type(X), " \n")
     print("\n X",X,"\n")
@@ -118,7 +118,7 @@ def main(args):
         X, T, test_size=args.train_rate, random_state=args.seed
     )
 
-    print("\n Muestro args antes de armar el modelo \n")
+    print("\n Showing args before creating model \n")
     print(args, "\n")
     manual_pause()
     
