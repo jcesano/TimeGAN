@@ -25,8 +25,8 @@ from models.utils import timegan_trainer, timegan_generator
 
 def manual_pause():
     print("Manual pause executed.")
-    wait = input("Please Enter to continue")
-    print("Continuing execution after manual pause")
+    #wait = input("Please Enter to continue")
+    #print("Continuing execution after manual pause")
 
 def main(args):
     ##############################################
@@ -90,7 +90,7 @@ def main(args):
 
     print("\n Showing args before excuting data_preprocess. \n")
     print("data_path:",data_path, "max_seq_len:", args.max_seq_len)
-    manual_pause()
+    #manual_pause()
     X, T, _, args.max_seq_len, args.padding_value = data_preprocess(
         data_path, args.max_seq_len
     )
@@ -105,7 +105,7 @@ def main(args):
     print("\n max_seq_len:", args.max_seq_len, "\n")
     print("\n padding: ", args.padding_value,"\n")
 
-    manual_pause()
+    #manual_pause()
 
     print(f"Processed data: {X.shape} (Idx x MaxSeqLen x Features)\n")
     print(f"Original data preview:\n{X[:2, :10, :2]}\n")
@@ -120,7 +120,7 @@ def main(args):
 
     print("\n Showing args before creating model \n")
     print(args, "\n")
-    manual_pause()
+    #manual_pause()
     
     #########################
     # Initialize and Run model
